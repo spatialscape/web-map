@@ -1,0 +1,105 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no"><title>SpatialScapesMap</title><link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Josefin+Sans&amp;display=swap"><link rel="stylesheet" href="assets/css/styles.min.css"><meta charset="utf-8">
+<title>Display a map on a webpage</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<style>
+body { margin: 0; padding: 0; }
+#map { 
+        margin: auto;
+        width: 288px;
+        height: 384px;
+        }
+#downloadLink{
+    margin-left: 456px;
+    margin-top: 10px;
+} 
+.btn-primary{
+    background-color: #2a4056 !important;
+    border-color: #2a4056 !important;
+}
+
+
+</style>
+</head><body><section class="team-boxed"><div class="container" style="padding-left: 29px;"><div class="row people" style="padding-bottom: 50px;"><div class="col-md-6 col-lg-4 mx-auto item" style="padding: 0px;margin: 0px;margin-left: 0px;height: 548px;"><div id="outline" class="box" style="padding: 30px;padding-bottom: 30px;height: 460px;margin-top: 70px;padding-top: 15px;width: 318px;margin-bottom: 30px;"><div class="d-lg-flex align-items-center justify-content-lg-center align-items-lg-center" id="map-div" style="width: 288px;height: 384px;margin: 0px;padding: 0px;padding-right: 0px;padding-bottom: 0px;padding-left: 5px;margin-left: -15px;padding-top: 5px;margin-top: 0px;border-style: solid;transform: translate(0px) translateZ(0px);"><!-- Load the `mapbox-gl-geocoder` plugin. -->
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
+
+<div id="map"></div>
+<div id="image"></div>
+
+<style>
+#map{
+    position: absolute;
+    width: 270px;
+    height: 366px;
+}
+</style>
+
+<script>
+    
+	mapboxgl.accessToken = 'pk.eyJ1Ijoic3BhdGlhbHNjYXBlIiwiYSI6ImNqdDliYjc5MDBkcHY0NGw4MjM0MHd0bjgifQ.LA3rnZXc-gRZ8dcXyJPPIw';
+    const map = new mapboxgl.Map({
+        container: 'map', // container ID
+        style: 'mapbox://styles/spatialscape/ckss598ay2vhw17n0vv5jhfhj', // style URL
+        center: [-74.5, 40], // starting position [lng, lat]
+        zoom: 9, // starting zoom
+        preserveDrawingBuffer: true
+    });
+</script></div><div class="row" style="height: 0px;width: 92.98400000000002px;margin: 3px;padding-left: 286px;padding-right: 0px;padding-top: 2px;"><div class="col" style="padding: 0px;padding-right: 0px;padding-left: 0px;text-align: center;"><span class="1.1" style="padding: 0px;padding-left: 0px;padding-bottom: 0px;padding-top: 0px;margin: 381px 0px 0px -318px;margin-top: 390px;height: 0px;margin-left: -323px;margin-bottom: 0px;min-height: 0px;max-height: 6px;width: 60.23439999999999px;padding-right: 107px;font-family: 'Josefin Sans', sans-serif;">CITY/TOWN</span><span style="font-family: 'Josefin Sans', sans-serif;">LATITUDE</span></div></div><hr style="color: rgb(0,0,0);margin-top: 22px;background: rgb(0, 0, 0);border-radius: 0px;margin-left: -14px;margin-right: -14px;margin-bottom: 12px;border: 0px solid rgb(0,0,0) ;"><div class="row" style="margin-bottom: 0px;margin-top: -15px;width: 59px;margin-right: -13px;margin-left: -4px;padding-right: 0px;"><div class="col"><span style="margin-right: 199px;margin-bottom: 0px;height: 0px;padding-bottom: 0px;margin-top: 0px;width: auto;font-family: 'Josefin Sans', sans-serif;padding-right: 0px;">STATE</span></div></div><div class="row" style="margin-bottom: 0px;height: 0px;padding-bottom: 0px;margin-right: -17px;"><div class="col" style="margin-top: -23px;margin-left: 167px;"><span style="margin-bottom: 0px;height: 1px;font-family: 'Josefin Sans', sans-serif;">LONGITUDE</span></div></div><div style="margin: 0px;margin-top: 0px;height: 0px;padding-top: 10px;padding-bottom: 10px;margin-bottom: 5px;"><script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
+
+<style>
+.geocoder {
+position: absolute;
+z-index: 1;
+top: 10px;
+}
+
+.mapboxgl-ctrl-geocoder {
+min-width: 100%;
+width: 250px!important;
+height: 50px!important;
+}
+
+#downloadLink{
+    margin-left: 0px;
+    margin-top: 10px;
+} 
+
+
+</style>
+
+<div id="geocoder" class="geocoder"></div>
+<a id="downloadLink" class="btn btn-primary" href="" role="button" download="map.png">Download ↓</a>
+
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1Ijoic3BhdGlhbHNjYXBlIiwiYSI6ImNqdDliYjc5MDBkcHY0NGw4MjM0MHd0bjgifQ.LA3rnZXc-gRZ8dcXyJPPIw';
+   // Add the control to the map.
+   const geocoder = new MapboxGeocoder({
+    accessToken: mapboxgl.accessToken,
+    mapboxgl: mapboxgl
+    });
+
+    $('#downloadLink').click(function() {
+        var img = map.getCanvas().toDataURL('image/png')
+        this.href = img
+    })
+
+
+    geocoder.on('result', function(e) {
+  geocoder.clear();
+  document.getElementsByClassName('mapboxgl-ctrl-geocoder--input')[0].blur();
+    });
+    
+    document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
+    
+
+</script>
+</div></div></div></div></div></section><script src="assets/bootstrap/js/bootstrap.min.js"></script></body></html>
