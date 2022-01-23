@@ -1,0 +1,447 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no"><title>SpatialScapesMap</title><link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Josefin+Sans&amp;display=swap"><link rel="stylesheet" href="assets/css/styles.min.css"><meta charset="utf-8">
+<title>Display a map on a webpage</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+
+<style>
+body { margin: 0; padding: 0; }
+#map { 
+        margin: auto;
+        width: 288px;
+        height: 384px;
+        }
+</style>
+</head><body><section class="d-flex align-items-center team-boxed" style="padding-right: 0px;height: auto;width: auto;"><div class="container d-flex flex-grow-0 justify-content-center m-auto visible" style="padding-left: 0px;margin-left: 0px;padding-right: 0px;width: 878px;margin-right: 0px;min-width: auto;margin-top: 0px;height: 878px;padding-top: 30px;"><div class="row" style="padding-left: 15px;"><div class="col-md-6 col-lg-4 d-flex justify-content-center align-items-center align-content-center mx-auto item" style="padding: 0px;margin: 0px;margin-left: auto;height: 548px;padding-left: 0px;padding-right: 0px;"><div id="outline" class="box" style="padding: 30px;padding-bottom: 30px;height: 460px;margin-top: 70px;padding-top: 15px;width: 318px;margin-bottom: 30px;border-width: 0px;border-radius: 0px;"><div class="d-lg-flex align-items-center justify-content-lg-center align-items-lg-center" id="map-div" style="width: 288px;height: 384px;margin: auto;padding: 0px;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;margin-left: -15px;padding-top: 0px;margin-top: 0px;transform: translate(0px) translateZ(0px);border-style: solid;border-color: rgb(49, 52, 55);"><!-- Load the `mapbox-gl-geocoder` plugin. -->
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
+
+<div id="map"></div>
+<div id="image"></div>
+
+<style>
+    #map {
+        position: absolute;
+        width: 282px;
+        height: 378px;
+    }
+</style>
+
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1Ijoic3BhdGlhbHNjYXBlIiwiYSI6ImNqdDliYjc5MDBkcHY0NGw4MjM0MHd0bjgifQ.LA3rnZXc-gRZ8dcXyJPPIw';
+    const map = new mapboxgl.Map({
+        container: 'map', // container ID
+        style: 'mapbox://styles/spatialscape/ckss598ay2vhw17n0vv5jhfhj', // style URL
+        center: [-74.5, 40], // starting position [lng, lat]
+        zoom: 9, // starting zoom
+        preserveDrawingBuffer: true
+    });
+
+    $(document).ready(function() {
+        $('#aquifer-button').on('click', function() {
+            var clickCount = parseInt($(this).data('count')) || 1; // Save click count on element itself
+            clickCount %= 2; // loop over
+
+            if (clickCount === 1) {
+                $('#outline').css({
+                    'background-color': '#00334e',
+                })
+                $('#map-div').css({
+                    'border-color': '#fdfdfdff'
+                })
+                $('#city-text').css({
+                    'color': '#fdfdfdff'
+                })
+                $('#state-text').css({
+                    'color': '#b3b3b3ff'
+                })
+                $('#latitude-text').css({
+                    'color': '#b3b3b3ff'
+                })
+                $('#longitude-text').css({
+                    'color': '#b3b3b3ff'
+                })
+                $('#border-line').css({
+                    'background': '#fdfdfdff',
+                    'border': '0.5px solid #fdfdfdff',
+                    'border-color': '#fdfdfdff'
+                })
+            // } else if (clickCount === 2) {
+            //     $('#outline').css({
+            //         'background-color': 'white',
+            //         'color': 'black'
+            //     })
+            // } else {
+            //     $('#outline').css({
+            //         'background-color': 'white',
+            //         'color': 'black'
+            //     })
+
+            };
+
+            // $(this).data('count', ++clickCount); // Update click count
+            map.setStyle('mapbox://styles/spatialscape/ckvvmuaq044e114p6fy04fq75');
+        });
+        $('#basin-button').on('click', function() {
+            var clickCount = parseInt($(this).data('count')) || 1; // Save click count on element itself
+            clickCount %= 2; // loop over
+
+            if (clickCount === 1) {
+                $('#outline').css({
+                    'background-color': '#fffeec',
+                })
+                $('#map-div').css({
+                    'border-color': '#d0bab3ff'
+                })
+                $('#city-text').css({
+                    'color': '#709fb0ff'
+                })
+                $('#state-text').css({
+                    'color': '#cfdac8ff'
+                })
+                $('#latitude-text').css({
+                    'color': '#b3b3b3ff'
+                })
+                $('#longitude-text').css({
+                    'color': '#b3b3b3ff'
+                })
+                $('#border-line').css({
+                    'background': '#d0bab3ff',
+                    'border': '0.5px solid #d0bab3ff',
+                    'border-color': '#d0bab3ff'
+                })
+            // } else if (clickCount === 2) {
+            //     $('#outline').css({
+            //         'background-color': 'white',
+            //         'color': 'black'
+            //     })
+            // } else {
+            //     $('#outline').css({
+            //         'background-color': 'white',
+            //         'color': 'black'
+            //     })
+
+            };
+
+            // $(this).data('count', ++clickCount); // Update click count
+            map.setStyle('mapbox://styles/spatialscape/ckss598ay2vhw17n0vv5jhfhj');
+        });
+        $('#coastal-button').on('click', function() {
+            var clickCount = parseInt($(this).data('count')) || 1; // Save click count on element itself
+            clickCount %= 2; // loop over
+
+            if (clickCount === 1) {
+                $('#outline').css({
+                    'background-color': '#ffffffff',
+                })
+                $('#map-div').css({
+                    'border-color': '#b3a797ff'
+                })
+                $('#city-text').css({
+                    'color': '#022e57ff'
+                })
+                $('#state-text').css({
+                    'color': '#a1ebc3ff'
+                })
+                $('#latitude-text').css({
+                    'color': '#b3b3b3ff'
+                })
+                $('#longitude-text').css({
+                    'color': '#b3b3b3ff'
+                })
+                $('#border-line').css({
+                    'background': '#82715dff',
+                    'border': '0.5px solid #82715dff',
+                    'border-color': '#82715dff'
+                })
+            // } else if (clickCount === 2) {
+            //     $('#outline').css({
+            //         'background-color': 'white',
+            //         'color': 'black'
+            //     })
+            // } else {
+            //     $('#outline').css({
+            //         'background-color': 'white',
+            //         'color': 'black'
+            //     })
+
+            };
+
+            // $(this).data('count', ++clickCount); // Update click count
+        });
+        $('#epicenter-button').on('click', function() {
+            var clickCount = parseInt($(this).data('count')) || 1; // Save click count on element itself
+            clickCount %= 2; // loop over
+
+            if (clickCount === 1) {
+                $('#outline').css({
+                    'background-color': '#1e2022ff',
+                })
+                $('#map-div').css({
+                    'border-color': '#fdfdfdff'
+                })
+                $('#city-text').css({
+                    'color': '#fdfdfdff'
+                })
+                $('#state-text').css({
+                    'color': '#b3b3b3ff'
+                })
+                $('#latitude-text').css({
+                    'color': '#b3b3b3ff'
+                })
+                $('#longitude-text').css({
+                    'color': '#b3b3b3ff'
+                })
+                $('#border-line').css({
+                    'background': '#fdfdfdff',
+                    'border': '0.5px solid #fdfdfdff',
+                    'border-color': '#fdfdfdff'
+                })
+            // } else if (clickCount === 2) {
+            //     $('#outline').css({
+            //         'background-color': 'white',
+            //         'color': 'black'
+            //     })
+            // } else {
+            //     $('#outline').css({
+            //         'background-color': 'white',
+            //         'color': 'black'
+            //     })
+
+            };
+
+            // $(this).data('count', ++clickCount); // Update click count
+        });
+        $('#glacier-button').on('click', function() {
+            var clickCount = parseInt($(this).data('count')) || 1; // Save click count on element itself
+            clickCount %= 2; // loop over
+
+            if (clickCount === 1) {
+                $('#outline').css({
+                    'background-color': '#ffffffff',
+                })
+                $('#map-div').css({
+                    'border-color': '#000000ff'
+                })
+                $('#city-text').css({
+                    'color': '#000000ff'
+                })
+                $('#state-text').css({
+                    'color': '#b3b3b3ff'
+                })
+                $('#latitude-text').css({
+                    'color': '#b3b3b3ff'
+                })
+                $('#longitude-text').css({
+                    'color': '#b3b3b3ff'
+                })
+                $('#border-line').css({
+                    'background': '#000000ff',
+                    'border': '0.5px solid #000000ff',
+                    'border-color': '#000000ff'
+                })
+            // } else if (clickCount === 2) {
+            //     $('#outline').css({
+            //         'background-color': 'white',
+            //         'color': 'black'
+            //     })
+            // } else {
+            //     $('#outline').css({
+            //         'background-color': 'white',
+            //         'color': 'black'
+            //     })
+
+            };
+
+            // $(this).data('count', ++clickCount); // Update click count
+        });
+        $('#plateau-button').on('click', function() {
+            var clickCount = parseInt($(this).data('count')) || 1; // Save click count on element itself
+            clickCount %= 2; // loop over
+
+            if (clickCount === 1) {
+                $('#outline').css({
+                    'background-color': '#c24914ff',
+                })
+                $('#map-div').css({
+                    'border-color': '#ffffffff'
+                })
+                $('#city-text').css({
+                    'color': '#ffffffff'
+                })
+                $('#state-text').css({
+                    'color': '#9dab86ff'
+                })
+                $('#latitude-text').css({
+                    'color': '#9dab86ff'
+                })
+                $('#longitude-text').css({
+                    'color': '#9dab86ff'
+                })
+                $('#border-line').css({
+                    'background': '#ffffffff',
+                    'border': '0.5px solid #ffffffff',
+                    'border-color': '#ffffffff'
+                })
+            // } else if (clickCount === 2) {
+            //     $('#outline').css({
+            //         'background-color': 'white',
+            //         'color': 'black'
+            //     })
+            // } else {
+            //     $('#outline').css({
+            //         'background-color': 'white',
+            //         'color': 'black'
+            //     })
+
+            };
+            
+
+            // $(this).data('count', ++clickCount); // Update click count
+            map.setStyle('mapbox://styles/spatialscape/ckx2bqgy23o2z14o0qq5b5yxx');
+        });
+    });
+    
+    //Use code to update lat/lon on map when user clicks on map
+    map.on('style.load', function() {
+        map.on('click', function(e) {
+            var coordinates = e.lngLat;
+            new mapboxgl.Popup()
+            .setLngLat(coordinates)
+            .setHTML(coordinates)
+            .addTo(map);
+        });
+    });
+</script></div><div class="row" style="height: 0px;width: 92.98400000000002px;margin: 3px;padding-left: 286px;padding-right: 0px;padding-top: 2px;"><div class="col" style="padding: 0px;padding-right: 0px;padding-left: 0px;text-align: center;"><div style="padding-right: 0px;padding-left: 18px;width: 0px;min-width: 0px;max-width: 0px;height: 0px;text-align: left;"><span class="text-uppercase 1.1" id="city-text" style="padding: 0px;padding-left: 0px;padding-bottom: 0px;padding-top: 0px;margin: 381px 0px 0px -335px;margin-top: 390px;height: 0px;margin-left: -320px;margin-bottom: 0px;min-height: 0px;max-height: 6px;width: 0px;padding-right: 0px;font-family: 'Josefin Sans', sans-serif;max-width: 10px;margin-right: 108px;color: var(--bs-gray);" input="text">CITY/TOWN</span></div><div style="text-align: left;padding-right: 0px;padding-left: 0px;"><span id="latitude-text" style="font-family: 'Josefin Sans', sans-serif;width: 0px;max-width: 0px;margin-left: -123px;color: var(--bs-gray);padding-left: 13px;font-size: 12px;padding-right: -11px;">LATITUDE</span></div></div></div><hr id="border-line" style="color: rgb(0,0,0);margin-top: 22px;background: var(--bs-gray-900);border-radius: 0px;margin-left: -14px;margin-right: -14px;margin-bottom: 12px;opacity: 1;border: 0.5px solid rgb(0,0,0) ;"><div class="row" style="margin-bottom: 0px;margin-top: -15px;width: 59px;margin-right: -13px;margin-left: -4px;padding-right: 0px;"><div class="col"><div style="padding-left: 0px;padding-right: 0px;"></div><span class="text-uppercase" id="state-text" style="margin-right: 196px;margin-bottom: 0px;height: 0px;padding-bottom: 0px;margin-top: 0px;width: auto;font-family: 'Josefin Sans', sans-serif;padding-right: 0px;padding-left: 0px;margin-left: -22px;">STATE</span></div></div><div class="row" style="margin-bottom: 0px;height: 0px;padding-bottom: 0px;margin-right: -17px;"><div class="col" style="margin-top: -23px;margin-left: 167px;"><div></div><span id="longitude-text" style="margin-bottom: 0px;height: 1px;font-family: 'Josefin Sans', sans-serif;color: var(--bs-gray);font-size: 12px;">LONGITUDE</span></div></div><div style="margin: 0px;margin-top: 0px;height: 0px;padding-top: 10px;padding-bottom: 10px;margin-bottom: 5px;"><form class="text-center" id="city-form" style="margin-top: 5px;margin-bottom: -5px;padding-top: 0px;padding-bottom: 0px;">
+
+<!--user type form-->
+<div class="form-group">
+    <!-- <label for="exampleInputEmail1">City/Town</label> -->
+    <!--<p placeholder=-->
+    <input type="text" class="form-control" placeholder="Enter City/Town" id="city-textInput" aria-describedby="emailHelp">
+</div>
+
+
+<!--input functions-->
+<script>
+    $('#city-textInput').keyup(function () {
+  $('#city-text').text($(this).val());
+});
+</script>
+
+
+</form><form class="text-center" id="state-form" style="margin-top: 5px;margin-bottom: -5px;padding: 0px;padding-top: 0px;padding-bottom: 0px;">
+
+<!--user type form-->
+<div class="form-group">
+    <!-- <label for="exampleInputEmail1">City/Town</label> -->
+    <!--<p placeholder=-->
+    <input type="text" class="form-control" id="state-textInput" placeholder="Type State/Country" aria-describedby="emailHelp">
+</div>
+
+
+<!--input functions-->
+<script>
+    $('#state-textInput').keyup(function () {
+  $('#state-text').text($(this).val());
+});
+</script>
+
+
+</form><form class="text-center" id="latitude-form" style="margin-top: 0px;margin-bottom: 0px;">
+
+<!--user type form-->
+<div class="form-group">
+    <!-- <label for="exampleInputEmail1">City/Town</label> -->
+    <input type="text" class="form-control" id="latitude-textInput" placeholder="Latitude" aria-describedby="emailHelp">
+</div>
+
+
+<!--input functions-->
+<script>
+$('#latitude-textInput').keyup(function () {
+  $('#latitude-text').text($(this).val());
+});
+</script>
+
+
+</form><form class="text-center" id="longitude-form" style="margin-top: 0px;margin-bottom: 0px;padding-top: -5px;">
+
+<!--user type form-->
+<div class="form-group">
+    <!-- <label for="exampleInputEmail1">City/Town</label> -->
+    <input type="text" class="form-control" id="longitude-textInput" placeholder="Longitude" aria-describedby="emailHelp">
+</div>
+
+
+<!--input functions-->
+<script>
+$('#longitude-textInput').keyup(function () {
+  $('#longitude-text').text($(this).val());
+});
+</script>
+
+
+</form><div class="row"><div class="col"><div class="dropdown"><button class="btn btn-secondary dropdown-toggle text-center border rounded-pill" aria-expanded="false" data-bs-toggle="dropdown" type="button">Choose Style</button><div class="dropdown-menu"><a class="dropdown-item" id="aquifer-button" href="#" style="border-color: #00334e;background: #00334e;color: rgb(255,255,255);">Aquifer</a><a class="dropdown-item" id="basin-button" href="#basin-button" style="color: rgb(234,179,175);background: #fffeec;">Basin</a><a class="dropdown-item" id="coastal-button" href="#coastal-button" style="color: rgb(10,31,52);background: #ffffff;border-color: rgb(22,30,68);">Coastal</a><a class="dropdown-item" id="epicenter-button" href="#coastal-button" style="color: #fdfdfd;background: #1e2022;border-color: rgb(22,30,68);">Epicenter</a><a class="dropdown-item" id="glacier-button" href="#coastal-button" style="color: #ffffff;background: #98bcca;border-color: rgb(22,30,68);">Glacier</a><a class="dropdown-item" id="plateau-button" href="#coastal-button" style="color: #9dab86ff;background: #c24914ff;border-color: rgb(22,30,68);">Plateau</a></div></div></div>
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
+
+<style>
+.geocoder {
+    position: absolute;
+    z-index: 1;
+    top: 10px;
+}
+
+.mapboxgl-ctrl-geocoder {
+    min-width: 100%;
+    width: 250px!important;
+    height: 40px!important;
+}
+
+#downloadLink{
+    margin-left: 0px;
+    margin-top: 10px;
+} 
+
+</style>
+
+<div id="geocoder" class="geocoder"></div>
+<a id="downloadLink" class="btn btn-primary" href="#" role="button" download="map.png">Download ↓</a>
+
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1Ijoic3BhdGlhbHNjYXBlIiwiYSI6ImNqdDliYjc5MDBkcHY0NGw4MjM0MHd0bjgifQ.LA3rnZXc-gRZ8dcXyJPPIw';
+   // Add the control to the map.
+   const geocoder = new MapboxGeocoder({
+    accessToken: mapboxgl.accessToken,
+    mapboxgl: mapboxgl
+    });
+
+    $('#downloadLink').click(function() {
+        var img = map.getCanvas().toDataURL('image/png')
+        this.href = img   
+    })
+
+    // Add zoom and rotation controls to the map.
+    map.addControl(new mapboxgl.NavigationControl());
+
+
+    geocoder.on('result', function(e) {
+  geocoder.clear();
+  document.getElementsByClassName('mapboxgl-ctrl-geocoder--input')[0].blur();
+    });
+    
+    document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
+
+</script>
+</div></div></div></div></div></div></section><script src="assets/bootstrap/js/bootstrap.min.js"></script><script src="assets/js/script.min.js"></script></body></html>
